@@ -1,0 +1,43 @@
+/* Iris Dataset Preprocessing with Scikit-learn */
+/*This script demonstrates the preprocessing steps for the Iris dataset, which is a popular dataset in the machine learning community. 
+The preprocessing steps include loading the dataset, feature scaling, encoding the target variable, and splitting the dataset into training and testing sets./*
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+
+# Load the Iris dataset from sklearn
+from sklearn.datasets import load_iris
+
+# Load dataset
+iris = load_iris()
+df = pd.DataFrame(data=iris.data, columns=iris.feature_names)
+df['species'] = iris.target
+
+# Map target values to species names for clarity
+df['species'] = df['species'].map({0: 'setosa', 1: 'versicolor', 2: 'virginica'})
+
+print("Initial Data:")
+print(df.head())
+
+# Separate features and target variable
+X = df.drop('species', axis=1)
+y = df['species']
+
+# Encode categorical target variable
+label_encoder = LabelEncoder()
+y_encoded = label_encoder.fit_transform(y)
+
+# Feature scaling
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y_encoded, test_size=0.3, random_state=42)
+
+print("\nPreprocessed Data:")
+print("X_train sample:")
+print(X_train[:5])
+print("y_train sample:")
+print(y_train[:5])
